@@ -1,5 +1,6 @@
 from enum import IntEnum
-
+import sys
+from PySide6.QtWidgets import QApplication, QFrame
 
 class Piece(IntEnum):
     NoShape = 0
@@ -9,4 +10,17 @@ class Piece(IntEnum):
     TShape = 4
     SquareShape = 5
     LShape = 6
-    MirroredLShape = 7
+    MirroredLShape = 6
+
+
+class TetrixWindow(QFrame):
+
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        print("This is a Tetrix window base class")
+
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    window = TetrixWindow()
+    window.show()
+    sys.exit(app.exec())
