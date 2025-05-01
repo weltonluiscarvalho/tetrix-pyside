@@ -26,7 +26,12 @@ class TetrixBoard(QFrame):
 
     def __init__(self, parent=None):
         super().__init__(parent)
-        print("This is a TetrixBoard base class!")
+        self._piece = TetrixPiece()
+
+class TetrixPiece:
+
+    def __init__(self):
+       print("This is a TetrixPiece class!") 
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
