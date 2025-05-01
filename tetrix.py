@@ -62,6 +62,7 @@ class TetrixPiece:
     )
 
     def __init__(self):
+        self.coords = [[0, 0] for _ in range(4)]
         self._piece_shape = Piece.NoShape
         print(f"This is a TetrixPiece class!, the shape of this piece is {self.shape()}") 
     
