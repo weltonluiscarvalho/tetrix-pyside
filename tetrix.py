@@ -31,7 +31,11 @@ class TetrixBoard(QFrame):
 class TetrixPiece:
 
     def __init__(self):
-       print("This is a TetrixPiece class!") 
+        self._piece_shape = Piece.NoShape
+        print(f"This is a TetrixPiece class!, the shape of this piece is {self.shape()}") 
+    
+    def shape(self):
+        return self._piece_shape
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
