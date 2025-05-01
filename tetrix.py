@@ -30,6 +30,37 @@ class TetrixBoard(QFrame):
 
 class TetrixPiece:
 
+    '''
+    this coords will represent a piece in a 5x5 matrix
+    example:
+            __________
+          2|          |
+          1|     #    |
+          0|     #    |
+         -1|   # #    |
+         -2|__________|
+           -2 -1 0 1 2 
+    '''
+
+    coords_table = (
+        # NoShape
+        ((0, 0), (0, 0), (0, 0), (0, 0)),
+        # ZShape
+        ((0, -1), (0, 0), (-1, 0), (-1, 1)),
+        # SShape
+        ((0, -1), (0, 0), (1, 0), (1, 1)),
+        # LineShape
+        ((0, -1), (0, 0), (0, 1), (0, 2)),
+        # TShape
+        ((-1, 0), (0, 0), (1, 0), (0, 1)),
+        # SquareShape
+        ((0, 0), (1, 0), (0, 1), (1, 1)),
+        # LShape
+        ((-1, -1), (0, -1), (0, 0), (0, 1)),
+        # MirroredLShape
+        ((1, -1), (0, -1), (0, 0), (0, 1))
+    )
+
     def __init__(self):
         self._piece_shape = Piece.NoShape
         print(f"This is a TetrixPiece class!, the shape of this piece is {self.shape()}") 
