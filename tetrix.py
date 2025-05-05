@@ -41,7 +41,6 @@ class TetrixPiece:
          -2|__________|
            -2 -1 0 1 2 
     '''
-
     coords_table = (
         # NoShape
         ((0, 0), (0, 0), (0, 0), (0, 0)),
@@ -68,6 +67,16 @@ class TetrixPiece:
     
     def shape(self):
         return self._piece_shape
+
+
+    def set_shape(self, shape):
+        table = TetrixPiece.coords_table[shape]
+        for i in range(4):
+            for j in range(2):
+                self.coords[i][j] = table[i][j]
+
+        self._piece_shape = shape
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
