@@ -27,6 +27,9 @@ class TetrixBoard(QFrame):
     def __init__(self, parent=None):
         super().__init__(parent)
         self._piece = TetrixPiece()
+        self._piece.set_x(3, 45)
+        self._piece.set_y(3, 46)
+        print(f" as posicoes do bloco 3 da peca são {self._piece.x(3)}, e {self._piece.y(3)}")
 
 class TetrixPiece:
 
@@ -76,6 +79,23 @@ class TetrixPiece:
                 self.coords[i][j] = table[i][j]
 
         self._piece_shape = shape
+
+    # this method will return de x coordinate of a constitute block of the piece, the index is de constitute block position at the piece
+    def x(self, index):
+        return self.coords[index][0]
+
+
+    # this method will return de y coordinate of a constitute block of the piece, the index is de constitute block position at the piece
+    def y(self, index):
+        return self.coords[index][1]
+
+
+    def set_x(self, index, x):
+        self.coords[index][0] = x
+
+
+    def set_y(self, index, y):
+        self.coords[index][1] = y
 
 
 if __name__ == "__main__":
