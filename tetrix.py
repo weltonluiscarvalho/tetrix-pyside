@@ -98,6 +98,18 @@ class TetrixPiece:
         self.coords[index][1] = y
 
 
+    def min_x(self):
+        m = self.coords[0][0]
+        for i in range(4):
+            m = min(m, self.coords[i][0])
+        return m
+
+    def max_x(self):
+        m = self.coords[0][0]
+        for i in range(4):
+            m = max(m, self.coords[i][0])
+        return m
+
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     window = TetrixWindow()
