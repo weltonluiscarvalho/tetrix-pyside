@@ -122,6 +122,30 @@ class TetrixPiece:
             m = max(m, self.coords[i][1])
         return m
 
+    def rotated_left(self):
+        if self._piece_shape == Piece.SquareShape:
+            return self
+
+        result = TetrixPiece()
+        result._piece_shape = self._piece_shape
+        for i in range(4):
+            result.set_x(i, self.y(i))
+            result.set_y(i, -self.x(i))
+
+        return result
+
+    def rotated_right(self):
+        if self._piece_shape == Piece.SquareShape:
+            return self
+
+        result = TetrixPiece()
+        result._piece_shape = self._piece_shape
+        for i in range(4):
+            result.set_x(i, -self.y(i))
+            result.set_y(i, self.x(i))
+
+        return result
+
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     window = TetrixWindow()
