@@ -1,5 +1,6 @@
 from enum import IntEnum
 import sys
+import random
 from PySide6.QtWidgets import QApplication, QFrame
 
 class Piece(IntEnum):
@@ -79,6 +80,9 @@ class TetrixPiece:
                 self.coords[i][j] = table[i][j]
 
         self._piece_shape = shape
+
+    def set_random_shape(self):
+        self.set_shape(random.randint(1, 7))
 
     # this method will return de x coordinate of a constitute block of the piece, the index is de constitute block position at the piece
     def x(self, index):
