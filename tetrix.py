@@ -27,10 +27,12 @@ class TetrixBoard(QFrame):
 
     def __init__(self, parent=None):
         super().__init__(parent)
-        self._piece = TetrixPiece()
-        self._piece.set_x(3, 45)
-        self._piece.set_y(3, 46)
-        print(f" as posicoes do bloco 3 da peca são {self._piece.x(3)}, e {self._piece.y(3)}")
+        self._cur_piece = TetrixPiece()
+        self._next_piece = TetrixPiece()
+
+    def clear_board(self):
+        self.board = [Piece.NoShape for _ in range(TetrixBoard.board_height * TetrixBoard.board_width)]
+
 
 class TetrixPiece:
 
@@ -67,7 +69,6 @@ class TetrixPiece:
     def __init__(self):
         self.coords = [[0, 0] for _ in range(4)]
         self._piece_shape = Piece.NoShape
-        print(f"This is a TetrixPiece class!, the shape of this piece is {self.shape()}") 
     
     def shape(self):
         return self._piece_shape
