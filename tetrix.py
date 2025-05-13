@@ -29,12 +29,16 @@ class TetrixBoard(QFrame):
         super().__init__(parent)
         self._cur_piece = TetrixPiece()
         self._next_piece = TetrixPiece()
+        self.level = 0
 
     def shape_at(self, x, y):
         return self.board[(y * TetrixBoard.board_width) + x]
 
     def set_shape_at(self, x, y, shape):
         self.board[(y * TetrixBoard.board_width) + x] = shape
+
+    def timeout_time(self):
+        return 1000 / (1 + self.level)
 
     def square_width(self):
         return self.contentsRect().width() / TetrixBoard.board_width
