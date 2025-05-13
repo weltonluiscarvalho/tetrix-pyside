@@ -36,6 +36,12 @@ class TetrixBoard(QFrame):
     def set_shape_at(self, x, y, shape):
         self.board[(y * TetrixBoard.board_width) + x] = shape
 
+    def square_width(self):
+        return self.contentsRect().width() / TetrixBoard.board_width
+
+    def square_height(self):
+        return self.contentsRect().height() / TetrixBoard.board_height
+
     def clear_board(self):
         self.board = [Piece.NoShape for _ in range(TetrixBoard.board_height * TetrixBoard.board_width)]
 
