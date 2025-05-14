@@ -1,6 +1,7 @@
 from enum import IntEnum
 import sys
 import random
+from PySide6.QtCore import QSize
 from PySide6.QtWidgets import QApplication, QFrame
 
 class Piece(IntEnum):
@@ -45,6 +46,12 @@ class TetrixBoard(QFrame):
 
     def square_height(self):
         return self.contentsRect().height() / TetrixBoard.board_height
+
+    def sizeHint(self):
+        return QSize(TetrixBoard.board_width * 15 + self.frameWidth() * 2, TetrixBoard.board_height * 15 + self.frameWidth() * 2)
+
+    def minimum_size_hint(self):
+        return QSize(TetrixBoard.board_width * 5 + self.frameWidth() * 2, TetrixBoard.board_height * 5 + self.frameWidth() * 2)
 
     def clear_board(self):
         self.board = [Piece.NoShape for _ in range(TetrixBoard.board_height * TetrixBoard.board_width)]
