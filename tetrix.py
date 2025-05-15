@@ -2,7 +2,7 @@ from enum import IntEnum
 import sys
 import random
 from PySide6.QtCore import QSize
-from PySide6.QtGui import QColor
+from PySide6.QtGui import QColor, QPainter, QPixmap
 from PySide6.QtWidgets import QApplication, QFrame
 
 class Piece(IntEnum):
@@ -29,6 +29,8 @@ class TetrixBoard(QFrame):
 
     def __init__(self, parent=None):
         super().__init__(parent)
+
+        self.nextPieceLabel = None
         self._cur_piece = TetrixPiece()
         self._next_piece = TetrixPiece()
         self.level = 0
@@ -56,6 +58,24 @@ class TetrixBoard(QFrame):
 
     def clear_board(self):
         self.board = [Piece.NoShape for _ in range(TetrixBoard.board_height * TetrixBoard.board_width)]
+
+    def show_next_piece(self):
+        if self.nextPieceLabel is not None:
+            return
+
+        dx = self._next_piece.max_x() - self._next_piece.min_x() + 1
+        dy = self._next_piece.max_y() - self._next_piece.min_y() + 1
+
+        pixmap = QPixmap(dx * self.square_width(), dy * self.square_height())
+        with QPainter(pixmap) as painter:
+            painter.fillRect(pixmap.rect(), self.nextPieceLabel.palette().background())
+
+        for i in range(4):
+            x = self._next_piece.x(i) - self._next_piece.min_x()
+            y = self._next_piece.y(i) - self._next_piece.min_y()
+            self.draw_square(painter, x * self.square_width(), y * self.square_height(), self._next_piece.shape())
+
+        self.nextPieceLabel.setPixmap(pixmap)
 
     def draw_square(self, painter, x, y, shape):
         color_table = [0x000000, 0xCC6666, 0x66CC66, 0x6666CC, 0xCCCC66, 0xCC66CC, 0x66CCCC, 0xDAAA00]
