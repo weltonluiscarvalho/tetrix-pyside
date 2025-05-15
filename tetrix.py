@@ -2,6 +2,7 @@ from enum import IntEnum
 import sys
 import random
 from PySide6.QtCore import QSize
+from PySide6.QtGui import QColor
 from PySide6.QtWidgets import QApplication, QFrame
 
 class Piece(IntEnum):
@@ -56,6 +57,19 @@ class TetrixBoard(QFrame):
     def clear_board(self):
         self.board = [Piece.NoShape for _ in range(TetrixBoard.board_height * TetrixBoard.board_width)]
 
+    def draw_square(self, painter, x, y, shape):
+        color_table = [0x000000, 0xCC6666, 0x66CC66, 0x6666CC, 0xCCCC66, 0xCC66CC, 0x66CCCC, 0xDAAA00]
+
+        color = QColor(color_table[shape])
+        painter.fillRect(x + 1, y + 1, self.square_width() - 2, color)
+
+        painter.setPen(color.lighter())
+        painter.drawLine(x, y + self.square_height() - 1, x, y)
+        painter.drawLine(x, y, x + self.square_width() - 1, y)
+
+        painter.setPen(color.darker())
+        painter.drawLine(x + 1, y + self.square_height() - 1, x + self.square_width() - 1, y + self.square_height() - 1)
+        painter.drawLine(x + self.square_width() - 1, y + self.square_height() - 1, x + self.square_width() - 1, y + 1)
 
 class TetrixPiece:
 
