@@ -33,6 +33,8 @@ class TetrixBoard(QFrame):
         self.nextPieceLabel = None
         self._cur_piece = TetrixPiece()
         self._next_piece = TetrixPiece()
+        self._cur_x = 0 
+        self._cur_y = 0
         self.level = 0
 
     def shape_at(self, x, y):
@@ -76,6 +78,21 @@ class TetrixBoard(QFrame):
             self.draw_square(painter, x * self.square_width(), y * self.square_height(), self._next_piece.shape())
 
         self.nextPieceLabel.setPixmap(pixmap)
+
+    def try_move(self, new_piece, new_x, new_y):
+        for i in range(4):
+            x = new_x + new_piece.x(i)
+            y = new_y + new_piece.y(i)
+            if x < 0 or x >= TetrixBoard.board_width or y < 0 or y >= TetrixBoard.board_height:
+                return False
+            if self.shape_at(x, y) != Piece.NoShape:
+                return False
+
+        self._cur_piece = new_piece
+        self._cur_x = new_x
+        self._cur_y = new_y
+        self.update()
+        return True
 
     def draw_square(self, painter, x, y, shape):
         color_table = [0x000000, 0xCC6666, 0x66CC66, 0x6666CC, 0xCCCC66, 0xCC66CC, 0x66CCCC, 0xDAAA00]
