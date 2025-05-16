@@ -1,7 +1,7 @@
 from enum import IntEnum
 import sys
 import random
-from PySide6.QtCore import QSize
+from PySide6.QtCore import QBasicTimer, QSize
 from PySide6.QtGui import QColor, QPainter, QPixmap
 from PySide6.QtWidgets import QApplication, QFrame
 
@@ -30,12 +30,19 @@ class TetrixBoard(QFrame):
     def __init__(self, parent=None):
         super().__init__(parent)
 
+        self.timer = QBasicTimer()
         self.nextPieceLabel = None
         self._cur_piece = TetrixPiece()
         self._next_piece = TetrixPiece()
         self._cur_x = 0 
         self._cur_y = 0
         self.level = 0
+        self.board = None 
+
+        self._is_started = False
+        self.clear_board()
+
+        self._next_piece.set_random_shape()
 
     def shape_at(self, x, y):
         return self.board[(y * TetrixBoard.board_width) + x]
@@ -60,6 +67,18 @@ class TetrixBoard(QFrame):
 
     def clear_board(self):
         self.board = [Piece.NoShape for _ in range(TetrixBoard.board_height * TetrixBoard.board_width)]
+
+    def new_piece(self):
+        self._cur_piece = self._next_piece
+        self._next_piece.set_random_shape()
+        self.show_next_piece()
+        self._cur_x = TetrixBoard.board_width // 2 + 1 
+        self._cur_y = TetrixBoard.board_height - 1 + self._cur_piece.min_y()
+
+        if not self.try_move(self._cur_piece, self._cur_x, self._cur_y):
+            self._cur_piece.set_shape(Piece.NoShape)
+            self.timer.stop()
+            self._is_started = False
 
     def show_next_piece(self):
         if self.nextPieceLabel is not None:
