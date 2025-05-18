@@ -1,7 +1,7 @@
 from enum import IntEnum
 import sys
 import random
-from PySide6.QtCore import QBasicTimer, QSize
+from PySide6.QtCore import QBasicTimer, QSize, Signal
 from PySide6.QtGui import QColor, QPainter, QPixmap
 from PySide6.QtWidgets import QApplication, QFrame
 
@@ -26,6 +26,9 @@ class TetrixWindow(QFrame):
 class TetrixBoard(QFrame):
     board_width = 10
     board_height = 22
+
+    score_changed = Signal(int)
+    level_changed = Signal(int)
 
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -77,7 +80,26 @@ class TetrixBoard(QFrame):
             new_y -= 1 
             drop_height += 1 
 
-        self.piece_dropped(self, drop_height)
+        self.piece_dropped(drop_height)
+
+    def piece_dropped(self, drop_height):
+        for i in range(4):
+            x = self._cur_x + self._cur_piece.x(i)
+            y = self._cur_y - self._cur_piece.y(i)
+            self.set_shape_at(x, y, self._cur_piece.shape())
+
+        self._num_pieces_dropped += 1 
+        if self._num_pieces_dropped % 25 == 0:
+            self.level += 1 
+            self.timer.start(self.timeout_time(), self)
+            self.level_changed.emit(self.level)
+
+        self.score += drop_height + 7
+        self.score_changed.emit(self.score)
+        self.remove_full_lines()
+
+        if not self._is_waiting_after_line:
+            self.new_piece()
 
     def new_piece(self):
         self._cur_piece = self._next_piece
