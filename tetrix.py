@@ -29,6 +29,7 @@ class TetrixBoard(QFrame):
 
     score_changed = Signal(int)
     level_changed = Signal(int)
+    lines_removed_changed = Signal(int)
 
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -43,6 +44,7 @@ class TetrixBoard(QFrame):
         self.board = None 
 
         self._is_started = False
+        self._is_waiting_after_line = False
         self.clear_board()
 
         self._next_piece.set_random_shape()
@@ -100,6 +102,37 @@ class TetrixBoard(QFrame):
 
         if not self._is_waiting_after_line:
             self.new_piece()
+            
+    def remove_full_lines(self):
+        num_full_lines = 0 
+
+        for i in range(TetrixBoard.board_height - 1, -1, -1):
+            line_is_full = True
+
+            for j in range(TetrixBoard.board_width):
+                if self.shape_at(j, i) == Piece.NoShape:
+                    line_is_full = False
+                    break
+
+            if line_is_full:
+                num_full_lines += 1 
+                for k in range(i, TetrixBoard.board_height - 1):
+                    for j in range(TetrixBoard.board_width):
+                        self.set_shape_at(j, k, self.shape_at(j, k + 1))
+
+                for j in range(TetrixBoard.board_width):
+                    self.set_shape_at(j, TetrixBoard.board_height - 1, Piece.NoShape)
+
+        if num_full_lines > 0:
+            self._num_lines_removed += num_full_lines
+            self.score += 10 * num_full_lines
+            self.lines_removed_changed.emit(self._num_lines_removed)
+            self.score_changed.emit(self.score)
+
+            self.timer.start(500, self)
+            self._is_waiting_after_line = True
+            self._cur_piece.set_shape(Piece.NoShape)
+            self.update()
 
     def new_piece(self):
         self._cur_piece = self._next_piece
