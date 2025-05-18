@@ -68,6 +68,17 @@ class TetrixBoard(QFrame):
     def clear_board(self):
         self.board = [Piece.NoShape for _ in range(TetrixBoard.board_height * TetrixBoard.board_width)]
 
+    def drop_down(self):
+        drop_height = 0
+        new_y = self._cur_y
+        while new_y > 0:
+            if not self.try_move(self._cur_piece, self._cur_x, new_y - 1):
+                break
+            new_y -= 1 
+            drop_height += 1 
+
+        self.piece_dropped(self, drop_height)
+
     def new_piece(self):
         self._cur_piece = self._next_piece
         self._next_piece.set_random_shape()
