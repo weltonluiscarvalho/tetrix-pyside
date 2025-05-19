@@ -73,6 +73,17 @@ class TetrixBoard(QFrame):
     def clear_board(self):
         self.board = [Piece.NoShape for _ in range(TetrixBoard.board_height * TetrixBoard.board_width)]
 
+    def timerEvent(self, event):
+        if event.timerId() == self.timer.timerId():
+            if self._is_waiting_after_line:
+                self._is_waiting_after_line = False
+                self.new_piece()
+                self.timer.start(self.timeout_time(), self)
+            else:
+                self.one_line_down()
+        else:
+            super(TetrixBoard, self).timerEvent(event)
+
     def drop_down(self):
         drop_height = 0
         new_y = self._cur_y
