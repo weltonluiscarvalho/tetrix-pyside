@@ -84,6 +84,10 @@ class TetrixBoard(QFrame):
 
         self.piece_dropped(drop_height)
 
+    def one_line_down(self):
+        if not self.try_move(self._cur_piece, self._cur_x, self._cur_y - 1):
+            self.piece_dropped(0)
+
     def piece_dropped(self, drop_height):
         for i in range(4):
             x = self._cur_x + self._cur_piece.x(i)
