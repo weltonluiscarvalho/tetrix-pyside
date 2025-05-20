@@ -1,7 +1,7 @@
 from enum import IntEnum
 import sys
 import random
-from PySide6.QtCore import QBasicTimer, QSize, Signal
+from PySide6.QtCore import QBasicTimer, QSize, Qt, Signal
 from PySide6.QtGui import QColor, QPainter, QPixmap
 from PySide6.QtWidgets import QApplication, QFrame
 
@@ -44,6 +44,7 @@ class TetrixBoard(QFrame):
         self.board = None 
 
         self._is_started = False
+        self._is_paused = False
         self._is_waiting_after_line = False
         self.clear_board()
 
@@ -72,6 +73,27 @@ class TetrixBoard(QFrame):
 
     def clear_board(self):
         self.board = [Piece.NoShape for _ in range(TetrixBoard.board_height * TetrixBoard.board_width)]
+
+    def keyPressEvent(self, event):
+        if not self._is_started or self._is_paused or self._cur_piece.shape() == Piece.NoShape:
+            super(TetrixBoard, self).keyPressEvent(event)
+            return
+
+        key = event.key()
+        if key == Qt.Key.Key_Left:
+            self.try_move(self._cur_piece, self._cur_x - 1, self._cur_y)
+        elif key == Qt.Key.Key_Right:
+            self.try_move(self._cur_piece, self._cur_x + 1, self._cur_y)
+        elif key == Qt.Key.Key_Down:
+            self.try_move(self._cur_piece.rotated_right(), self._cur_x, self._cur_y)
+        elif key == Qt.Key.Key_Up:
+            self.try_move(self._cur_piece.rotated_left(), self._cur_x, self._cur_y)
+        elif key == Qt.Key.Key_Space:
+            self.drop_down()
+        elif key == Qt.Key.Key_D:
+            self.one_line_down()
+        else:
+            super(TetrixBoard, self).keyPressEvent(event)
 
     def timerEvent(self, event):
         if event.timerId() == self.timer.timerId():
