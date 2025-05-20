@@ -95,6 +95,35 @@ class TetrixBoard(QFrame):
         else:
             super(TetrixBoard, self).keyPressEvent(event)
 
+    def paintEvent(self, event):
+        super(TetrixBoard, self).paintEvent(event)
+
+        with QPainter(self) as painter:
+            rect = self.contentsRect()
+
+            if self._is_paused:
+                painter.drawText(rect, Qt.AlignmentFlag.AlignCenter, "Pause")
+                return
+
+            board_top = rect.bottom() - TetrixBoard.board_height * self.square_height()
+
+            for i in range(TetrixBoard.board_height):
+                for j in range(TetrixBoard.board_width):
+                    shape = self.shape_at(j, TetrixBoard.board_height - i - 1)
+                    if shape != Piece.NoShape:
+                        self.draw_square(painter,
+                                         rect.left() + j * self.square_width(),
+                                         board_top + i * self.square_height(), shape)
+
+            if self._cur_piece.shape() != Piece.NoShape:
+                for i in range(4):
+                    x = self._cur_x + self._cur_piece.x(i)
+                    y = self._cur_y - self._cur_piece.y(i)
+                    self.draw_square(painter, rect.left() + x * self.square_width(),
+                                     board_top
+                                     + (TetrixBoard.board_height - y - 1) * self.square_height(),
+                                     self._cur_piece.shape())
+
     def timerEvent(self, event):
         if event.timerId() == self.timer.timerId():
             if self._is_waiting_after_line:
