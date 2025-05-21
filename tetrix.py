@@ -93,6 +93,19 @@ class TetrixBoard(QFrame):
 
         self.new_piece()
         self.timer.start(self.timeout_time(), self)
+    
+    @Slot()
+    def pause(self):
+        if not self._is_started:
+            return
+
+        self._is_paused = not self._is_paused
+        if self._is_paused:
+            self.timer.stop()
+        else:
+            self.timer.start(self.timeout_time(), self)
+
+        self.update()
 
     def keyPressEvent(self, event):
         if not self._is_started or self._is_paused or self._cur_piece.shape() == Piece.NoShape:
