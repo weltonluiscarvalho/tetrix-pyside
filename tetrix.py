@@ -1,7 +1,7 @@
 from enum import IntEnum
 import sys
 import random
-from PySide6.QtCore import QBasicTimer, QSize, Qt, Signal
+from PySide6.QtCore import QBasicTimer, QSize, Qt, Signal, Slot
 from PySide6.QtGui import QColor, QPainter, QPixmap
 from PySide6.QtWidgets import QApplication, QFrame
 
@@ -73,6 +73,26 @@ class TetrixBoard(QFrame):
 
     def clear_board(self):
         self.board = [Piece.NoShape for _ in range(TetrixBoard.board_height * TetrixBoard.board_width)]
+
+    @Slot()
+    def start(self):
+        if self._is_paused:
+            return
+
+        self._is_started = True
+        self._is_waiting_after_line = False
+        self._num_lines_removed = 0 
+        self._num_pieces_dropped = 0 
+        self.score = 0 
+        self.level = 1 
+        self.clear_board()
+
+        self.lines_removed_changed.emit(self._num_lines_removed)
+        self.score_changed.emit(self.score)
+        self.level_changed.emit(self.level)
+
+        self.new_piece()
+        self.timer.start(self.timeout_time(), self)
 
     def keyPressEvent(self, event):
         if not self._is_started or self._is_paused or self._cur_piece.shape() == Piece.NoShape:
