@@ -36,16 +36,21 @@ class TetrixBoard(QFrame):
 
         self.timer = QBasicTimer()
         self.nextPieceLabel = None
+        self._is_waiting_after_line = False
         self._cur_piece = TetrixPiece()
         self._next_piece = TetrixPiece()
         self._cur_x = 0 
         self._cur_y = 0
+        self._num_lines_removed = 0
+        self._num_pieces_dropped = 0
+        self.score = 0
         self.level = 0
         self.board = None 
 
+        self.setFrameStyle(QFrame.Shape.Panel | QFrame.Shadow.Sunken)
+        self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
         self._is_started = False
         self._is_paused = False
-        self._is_waiting_after_line = False
         self.clear_board()
 
         self._next_piece.set_random_shape()
