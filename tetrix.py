@@ -3,7 +3,7 @@ import sys
 import random
 from PySide6.QtCore import QBasicTimer, QSize, Qt, Signal, Slot
 from PySide6.QtGui import QColor, QPainter, QPixmap
-from PySide6.QtWidgets import QApplication, QFrame
+from PySide6.QtWidgets import QApplication, QFrame, QLabel
 
 class Piece(IntEnum):
     NoShape = 0
@@ -21,6 +21,11 @@ class TetrixWindow(QFrame):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.board = TetrixBoard()
+
+    def create_label(self, text):
+        lbl = QLabel(text)
+        lbl.setAlignment(Qt.AlignmentFlag.AlignCenter | Qt.AlignmentFlag.AlignBottom)
+        return lbl
 
 
 class TetrixBoard(QFrame):
