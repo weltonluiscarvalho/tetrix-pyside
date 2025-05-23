@@ -20,7 +20,13 @@ class TetrixWindow(QFrame):
 
     def __init__(self, parent=None):
         super().__init__(parent)
+
         self.board = TetrixBoard()
+
+        next_piece_label = QLabel()
+        next_piece_label.setFrameStyle(QFrame.Shape.Box | QFrame.Shape.Raised)
+        next_piece_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.board.set_next_piece_label(next_piece_label)
 
     def create_label(self, text):
         lbl = QLabel(text)
