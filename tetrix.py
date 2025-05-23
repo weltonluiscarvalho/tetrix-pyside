@@ -81,6 +81,9 @@ class TetrixBoard(QFrame):
     def square_height(self):
         return self.contentsRect().height() / TetrixBoard.board_height
 
+    def set_next_piece_label(self, label):
+        self.nextPieceLabel = label
+
     def sizeHint(self):
         return QSize(TetrixBoard.board_width * 15 + self.frameWidth() * 2, TetrixBoard.board_height * 15 + self.frameWidth() * 2)
 
