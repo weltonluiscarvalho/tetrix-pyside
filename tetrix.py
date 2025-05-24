@@ -3,7 +3,7 @@ import sys
 import random
 from PySide6.QtCore import QBasicTimer, QSize, Qt, Signal, Slot
 from PySide6.QtGui import QColor, QPainter, QPixmap
-from PySide6.QtWidgets import QApplication, QFrame, QLCDNumber, QLabel
+from PySide6.QtWidgets import QApplication, QFrame, QLCDNumber, QLabel, QPushButton
 
 class Piece(IntEnum):
     NoShape = 0
@@ -34,6 +34,13 @@ class TetrixWindow(QFrame):
         level_lcd.setSegmentStyle(QLCDNumber.SegmentStyle.Filled)
         lines_lcd = QLCDNumber(5)
         lines_lcd.setSegmentStyle(QLCDNumber.SegmentStyle.Filled)
+
+        start_button = QPushButton("&Start")
+        start_button.setFocusPolicy(Qt.FocusPolicy.NoFocus)
+        quit_button = QPushButton("&Quit")
+        quit_button.setFocusPolicy(Qt.FocusPolicy.NoFocus)
+        pause_button = QPushButton("&Pause")
+        pause_button.setFocusPolicy(Qt.FocusPolicy.NoFocus)
 
     def create_label(self, text):
         lbl = QLabel(text)
