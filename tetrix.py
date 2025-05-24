@@ -3,7 +3,7 @@ import sys
 import random
 from PySide6.QtCore import QBasicTimer, QSize, Qt, Signal, Slot
 from PySide6.QtGui import QColor, QPainter, QPixmap
-from PySide6.QtWidgets import QApplication, QFrame, QLabel
+from PySide6.QtWidgets import QApplication, QFrame, QLCDNumber, QLabel
 
 class Piece(IntEnum):
     NoShape = 0
@@ -24,9 +24,16 @@ class TetrixWindow(QFrame):
         self.board = TetrixBoard()
 
         next_piece_label = QLabel()
-        next_piece_label.setFrameStyle(QFrame.Shape.Box | QFrame.Shape.Raised)
+        next_piece_label.setFrameStyle(QFrame.Shape.Box | QFrame.Shadow.Raised)
         next_piece_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.board.set_next_piece_label(next_piece_label)
+
+        score_lcd = QLCDNumber(5)
+        score_lcd.setSegmentStyle(QLCDNumber.SegmentStyle.Filled)
+        level_lcd = QLCDNumber(2)
+        level_lcd.setSegmentStyle(QLCDNumber.SegmentStyle.Filled)
+        lines_lcd = QLCDNumber(5)
+        lines_lcd.setSegmentStyle(QLCDNumber.SegmentStyle.Filled)
 
     def create_label(self, text):
         lbl = QLabel(text)
