@@ -42,6 +42,13 @@ class TetrixWindow(QFrame):
         pause_button = QPushButton("&Pause")
         pause_button.setFocusPolicy(Qt.FocusPolicy.NoFocus)
 
+        start_button.clicked.connect(self.board.start)
+        pause_button.clicked.connect(self.board.pause)
+        quit_button.clicked.connect(qApp.quit)
+        self.board.score_changed.connect(score_lcd.display)
+        self.board.level_changed.connect(level_lcd.display)
+        self.board.lines_removed_changed.connect(lines_lcd.display)
+
     def create_label(self, text):
         lbl = QLabel(text)
         lbl.setAlignment(Qt.AlignmentFlag.AlignCenter | Qt.AlignmentFlag.AlignBottom)
