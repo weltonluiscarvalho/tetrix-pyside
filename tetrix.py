@@ -3,7 +3,7 @@ import sys
 import random
 from PySide6.QtCore import QBasicTimer, QSize, Qt, Signal, Slot
 from PySide6.QtGui import QColor, QPainter, QPixmap
-from PySide6.QtWidgets import QApplication, QFrame, QLCDNumber, QLabel, QPushButton
+from PySide6.QtWidgets import QApplication, QFrame, QGridLayout, QLCDNumber, QLabel, QPushButton
 
 class Piece(IntEnum):
     NoShape = 0
@@ -48,6 +48,23 @@ class TetrixWindow(QFrame):
         self.board.score_changed.connect(score_lcd.display)
         self.board.level_changed.connect(level_lcd.display)
         self.board.lines_removed_changed.connect(lines_lcd.display)
+
+        layout = QGridLayout(self)
+        layout.addWidget(self.create_label("NEXT"), 0, 0)
+        layout.addWidget(next_piece_label, 1, 0)
+        layout.addWidget(self.create_label("LEVEL"), 2, 0)
+        layout.addWidget(level_lcd, 3, 0)
+        layout.addWidget(start_button, 4, 0)
+        layout.addWidget(self.board, 0, 1, 6, 1)
+        layout.addWidget(self.create_label("SCORE"), 0, 2)
+        layout.addWidget(score_lcd, 1, 2)
+        layout.addWidget(self.create_label("LINES REMOVED"), 2, 2)
+        layout.addWidget(lines_lcd, 3, 2)
+        layout.addWidget(quit_button, 4, 2)
+        layout.addWidget(pause_button, 5, 2)
+
+        self.setWindowTitle("Tetrix")
+        self.resize(550, 370)
 
     def create_label(self, text):
         lbl = QLabel(text)
