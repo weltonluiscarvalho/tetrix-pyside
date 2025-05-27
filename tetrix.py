@@ -336,10 +336,10 @@ class TetrixBoard(QFrame):
         return True
 
     def draw_square(self, painter, x, y, shape):
-        color_table = [0x000000, 0xCC6666, 0x66CC66, 0x6666CC, 0xCCCC66, 0xCC66CC, 0x66CCCC, 0xDAAA00]
+        color_table = [0x000000, 0xcc6666, 0x66cc66, 0x6666cc, 0xcccc66, 0xcc66cc, 0x66cccc, 0xdaaa00]
 
         color = QColor(color_table[shape])
-        painter.fillRect(x + 1, y + 1, self.square_width() - 2, color)
+        painter.fillRect(x + 1, y + 1, self.square_width() - 2, self.square_height() - 2, color)
 
         painter.setPen(color.lighter())
         painter.drawLine(x, y + self.square_height() - 1, x, y)
@@ -384,6 +384,8 @@ class TetrixPiece:
     def __init__(self):
         self.coords = [[0, 0] for _ in range(4)]
         self._piece_shape = Piece.NoShape
+
+        self.set_shape(Piece.NoShape)
     
     def shape(self):
         return self._piece_shape
@@ -431,13 +433,13 @@ class TetrixPiece:
         return m
 
     def min_y(self):
-        m = self.coords[0][0]
+        m = self.coords[0][1]
         for i in range(4):
             m = min(m, self.coords[i][1])
         return m
 
     def max_y(self):
-        m = self.coords[0][0]
+        m = self.coords[0][1]
         for i in range(4):
             m = max(m, self.coords[i][1])
         return m
@@ -470,4 +472,5 @@ if __name__ == "__main__":
     app = QApplication(sys.argv)
     window = TetrixWindow()
     window.show()
+    random.seed(None)
     sys.exit(app.exec())
