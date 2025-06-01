@@ -15,7 +15,6 @@ class Piece(IntEnum):
     LShape = 6
     MirroredLShape = 6
 
-
 class TetrixWindow(QFrame):
 
     def __init__(self, parent=None):
